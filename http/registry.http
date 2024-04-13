@@ -1,0 +1,34 @@
+### get all service instance
+GET http://localhost:9088/findAll?service=cn.abner.asrpc.UserService
+
+###
+POST http://localhost:9088/register?service=cn.abner.asrpc.UserService
+Content-Type: application/json
+
+{
+  "context": "asrpc",
+  "host":"127.0.0.1",
+  "schema": "http",
+  "port":8081,
+  "status": false,
+  "parameters":{
+    "env": "dev",
+    "tag": "RED"
+  }
+}
+
+###
+POST http://localhost:9088/unregister?service=cn.abner.asrpc.UserService
+Content-Type: application/json
+
+{
+  "context": "asrpc",
+  "host":"127.0.0.1",
+  "schema": "http",
+  "port":8081,
+  "status": false,
+  "parameters":{
+    "env": "dev",
+    "tag": "RED"
+  }
+}

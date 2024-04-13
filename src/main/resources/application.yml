@@ -1,0 +1,5 @@
+spring:
+  application:
+    name: as-registry
+server:
+  port: 9088
