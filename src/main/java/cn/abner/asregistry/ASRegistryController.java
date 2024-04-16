@@ -1,5 +1,7 @@
 package cn.abner.asregistry;
 
+import cn.abner.asregistry.cluster.Cluster;
+import cn.abner.asregistry.cluster.Server;
 import cn.abner.asregistry.model.InstanceMeta;
 import cn.abner.asregistry.service.RegistryService;
 import lombok.extern.slf4j.Slf4j;
@@ -13,7 +15,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Description for this class
+ * Rest controller for this class
  *
  * <p>
  * {@code @author:} Abner Song
@@ -25,6 +27,8 @@ import java.util.Map;
 public class ASRegistryController {
     @Autowired
     private RegistryService registryService;
+    @Autowired
+    private Cluster cluster;
 
     @RequestMapping("/register")
     public InstanceMeta register(@RequestParam String service, @RequestBody InstanceMeta instance) {
@@ -45,9 +49,15 @@ public class ASRegistryController {
     }
 
     @RequestMapping("/renew")
-    public long renew(String service, InstanceMeta instance) {
+    public long renew(@RequestParam String service, @RequestBody InstanceMeta instance) {
         log.info("=======> renew {} @ {}", service, instance);
         return registryService.renew(instance, service);
+    }
+
+    @RequestMapping("/renews")
+    public long renews(@RequestParam String services, @RequestBody InstanceMeta instance) {
+        log.info("=======> renews {} @ {}", services, instance);
+        return registryService.renew(instance, services.split(","));
     }
 
     @RequestMapping("/version")
@@ -59,6 +69,32 @@ public class ASRegistryController {
     @RequestMapping("/versions")
     public Map<String, Long> versions(@RequestParam String service, InstanceMeta instance) {
         log.info("=======> versions {} @ {}", service, instance);
-        return registryService.getVersions(service)
+        return registryService.getVersions(service);
+    }
+
+    @RequestMapping("/info")
+    public Server info() {
+        log.info("=======> info: {}", cluster.self());
+        return cluster.self();
+    }
+
+    @RequestMapping("/cluster")
+    public List<Server> cluster() {
+        log.info("=======> cluster: {}", cluster.getServers());
+        return cluster.getServers();
+    }
+
+    @RequestMapping("/leader")
+    public List<Server> leader() {
+        log.info("=======> leader: {}", cluster.leader());
+        return cluster.getServers();
+    }
+
+
+    @RequestMapping("/setLeader")
+    public List<Server> setLeader() {
+        cluster.self().setLeader(true);
+        log.info("=======> set leader: {}", cluster.self());
+        return cluster.getServers();
     }
 }

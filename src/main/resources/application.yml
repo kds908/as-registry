@@ -3,3 +3,9 @@ spring:
     name: as-registry
 server:
   port: 9088
+
+as-registry:
+  serverList:
+    - http://127.0.0.1:9087
+    - http://127.0.0.1:9088
+    - http://127.0.0.1:9089

@@ -1,5 +1,6 @@
 package cn.abner.asregistry;
 
+import cn.abner.asregistry.cluster.Cluster;
 import cn.abner.asregistry.health.ASHealthChecker;
 import cn.abner.asregistry.health.HealthChecker;
 import cn.abner.asregistry.service.ASRegistryService;
@@ -24,8 +25,13 @@ public class RegistryConfig {
         return new ASRegistryService();
     }
 
-    @Bean(initMethod = "start", destroyMethod = "stop")
-    public HealthChecker healthChecker(@Autowired RegistryService registryService) {
-        return new ASHealthChecker(registryService);
+//    @Bean(initMethod = "start", destroyMethod = "stop")
+//    public HealthChecker healthChecker(@Autowired RegistryService registryService) {
+//        return new ASHealthChecker(registryService);
+//    }
+
+    @Bean(initMethod = "init")
+    public Cluster cluster(@Autowired ASRegistryConfigProperties asRegistryConfigProperties) {
+        return new Cluster(asRegistryConfigProperties);
     }
 }
